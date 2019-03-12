@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.marco.babylonproject.model.primitives.Post;
 import com.marco.babylonproject.repository.Repository;
+import com.marco.babylonproject.usecase.GetPostsUseCase;
 
 import java.util.List;
 
@@ -20,18 +21,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Repository.postsApi repository = Repository.getRetrofitInstance().create(Repository.postsApi.class);
-        Call<Post> call = repository.getPostById("3");
-        call.enqueue(new Callback<Post>() {
-            @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
-                Toast.makeText(MainActivity.this, "WOW", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<Post> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "FUCK", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

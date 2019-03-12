@@ -1,26 +1,12 @@
 package com.marco.babylonproject.usecase;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
 
-public abstract class UseCase <Q extends UseCase.Request, R extends UseCase.Response> {
+public abstract class UseCase <Request, Response > {
 
-    Request request = null;
-    useCaseCallback<R> callback = null;
-
-    abstract void executeUseCase(@Nullable Request request);
-
-    public interface Request {
-
-    }
-
-    public interface Response {
-
-    }
-
-    public interface useCaseCallback<T> {
-        void onSuccess(T response);
-        void onError(Throwable t);
-
-    }
+    public abstract LiveData<Response> execute(@Nullable Request request);
 }
 
