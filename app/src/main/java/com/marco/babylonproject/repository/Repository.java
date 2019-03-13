@@ -3,6 +3,7 @@ package com.marco.babylonproject.repository;
 import com.marco.babylonproject.model.primitives.Comment;
 import com.marco.babylonproject.model.primitives.Post;
 import com.marco.babylonproject.model.primitives.User;
+import com.marco.babylonproject.utility.Constants;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +20,11 @@ import retrofit2.http.Query;
 public class Repository {
     private static Retrofit instance;
     private static final String URL = "http://jsonplaceholder.typicode.com/";
+    private static final String avatarUrl = "http://api.adorable.io/avatars/";
+
+    public static String getAvatarUrl(String uId) {
+        return avatarUrl.concat(Constants.AVATAR_SIZE).concat("/").concat(uId).concat(".png");
+    }
 
     /**
      * Create an instance of Retrofit object
