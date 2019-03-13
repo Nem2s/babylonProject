@@ -7,6 +7,12 @@ import android.support.annotation.Nullable;
 
 public abstract class UseCase <Request, Response > {
 
+    private final MutableLiveData<Response> data = new MutableLiveData<>();
+
     public abstract LiveData<Response> execute(@Nullable Request request);
+
+    public MutableLiveData<Response> data() {
+        return data;
+    }
 }
 

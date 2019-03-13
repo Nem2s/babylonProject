@@ -16,10 +16,9 @@ import retrofit2.Response;
 
 public class GetPostsUseCase extends UseCase<String, List<Post>> {
 
-    private MutableLiveData<List<Post>> posts = new MutableLiveData<>();
-
     @Override
     public LiveData<List<Post>> execute(@Nullable String s) {
+        MutableLiveData<List<Post>> posts = data();
         Repository.postsApi api = Repository.getRetrofitInstance().create(Repository.postsApi.class);
         api.getPosts().enqueue(new Callback<List<Post>>() {
             @Override
