@@ -57,6 +57,9 @@ public class Repository {
         @GET("posts/")
         Call<List<Post>> getPosts();
 
+        @GET("posts/{id}/comments")
+        Call<List<Comment>> getCommentsByPostId(@Path("id") String id);
+
     }
     public interface usersApi {
         @GET("users/{id}")

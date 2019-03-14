@@ -1,25 +1,33 @@
-package com.marco.babylonproject;
+package com.marco.babylonproject.view;
 
 import android.animation.Animator;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.marco.babylonproject.R;
 import com.marco.babylonproject.adapter.PostsAdapter;
 import com.marco.babylonproject.contract.OnItemClickListener;
 import com.marco.babylonproject.model.primitives.Post;
 import com.marco.babylonproject.repository.Repository;
 import com.marco.babylonproject.usecase.GetPostsUseCase;
 import com.marco.babylonproject.utility.AnimHelper;
+import com.marco.babylonproject.utility.Constants;
 import com.marco.babylonproject.viewmodel.MainActivityViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -59,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void observeData() {
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        viewModel.observePosts().execute(null).observe(this, posts -> {
+        viewModel.observePosts().observe(this, posts -> {
             if(posts!= null && !posts.isEmpty()) {
                 adapter.setData(posts);
                 adapter.notifyDataSetChanged();
@@ -68,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         viewModel.observeError().observe(this, text -> {
             if (text != null && !text.isEmpty()) {
                 AnimHelper.animateInfoBanner(infoBanner);
+            }
+        });
+        viewModel.observeLoading().observe(this, isLoading -> {
+            if (isLoading != null) {
+                refreshLayout.setRefreshing(isLoading);
             }
         });
     }
@@ -79,7 +92,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     @Override
-    public void onItemClick(Post post) {
-        viewModel.onItemClicked(post);
+    public void onItemClick(View view, Post post) {
+        Intent intent = new Intent(this, PostDetailsActivity.class);
+        intent.putExtra(Constants.POST_IDENTIFIER, post.getId().toString());
+        intent.putExtra(Constants.USER_IDENTIFIER, post.getUserId().toString());
+        // Creating options
+        ActivityCompat.startActivity(this, intent, null);
     }
+
 }

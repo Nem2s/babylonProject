@@ -77,7 +77,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostHolder> 
             body.setText(item.getBody());
             title.setText(item.getTitle());
             itemView.setOnClickListener(v -> {
-                listener.onItemClick(item);
+                listener.onItemClick(avatar, item);
             });
         }
     }
