@@ -23,7 +23,13 @@ public class MainActivityViewModel extends ViewModel {
         return getPosts;
     }
 
-    public LiveData<String> observError() {
+    public LiveData<String> observeError() {
         return isError;
+    }
+
+    public void onRefreshPulled() {
+    }
+
+    public void onItemClicked(Post item) {
     }
 }

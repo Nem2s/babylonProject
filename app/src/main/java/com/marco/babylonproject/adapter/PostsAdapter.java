@@ -1,26 +1,20 @@
 package com.marco.babylonproject.adapter;
 
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.Request;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.marco.babylonproject.R;
+import com.marco.babylonproject.contract.OnItemClickListener;
 import com.marco.babylonproject.model.primitives.Post;
 import com.marco.babylonproject.repository.Repository;
-import com.marco.babylonproject.utility.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +24,12 @@ import butterknife.ButterKnife;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostHolder> {
 
+    private final OnItemClickListener listener;
     List<Post> posts = new ArrayList<>();
+
+    public PostsAdapter(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public void setData(List<Post> data) {
         this.posts = data;
@@ -45,12 +44,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostHolder> 
     @Override
     public void onBindViewHolder(@NonNull PostHolder viewHolder, int position) {
         Post item = posts.get(position);
-        viewHolder.bind(item);
+        viewHolder.bind(item, listener);
     }
 
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    public void onItemClickListener() {
     }
 
     public static class PostHolder extends RecyclerView.ViewHolder {
@@ -67,13 +69,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostHolder> 
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Post item) {
+        public void bind(Post item, OnItemClickListener listener) {
             Glide.with(itemView)
                     .load(Repository.getAvatarUrl(item.getUserId().toString()))
                     .apply(RequestOptions.circleCropTransform())
                     .into(avatar);
             body.setText(item.getBody());
             title.setText(item.getTitle());
+            itemView.setOnClickListener(v -> {
+                listener.onItemClick(item);
+            });
         }
     }
 }
