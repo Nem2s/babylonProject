@@ -22,4 +22,8 @@ public class MainActivityViewModel extends ViewModel {
     public GetPostsUseCase observePosts() {
         return getPosts;
     }
+
+    public LiveData<String> observError() {
+        return isError;
+    }
 }

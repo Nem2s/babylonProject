@@ -3,6 +3,7 @@ package com.marco.babylonproject.usecase;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.marco.babylonproject.model.primitives.Post;
@@ -16,6 +17,7 @@ import retrofit2.Response;
 
 public class GetPostsUseCase extends UseCase<String, List<Post>> {
 
+    @NonNull
     @Override
     public LiveData<List<Post>> execute(@Nullable String id) {
         MutableLiveData<List<Post>> posts = data();
