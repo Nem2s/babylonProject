@@ -6,7 +6,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 
 import com.marco.babylonproject.model.primitives.Post;
-import com.marco.babylonproject.repository.Repository;
 import com.marco.babylonproject.usecase.GetPostsUseCase;
 import com.marco.babylonproject.viewmodel.MainActivityViewModel;
 
@@ -27,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import retrofit2.http.POST;
-
 @RunWith(MockitoJUnitRunner.class)
 public class MainActivityViewModelTest {
 
@@ -39,7 +36,7 @@ public class MainActivityViewModelTest {
     GetPostsUseCase useCase;
 
     @Mock
-    Observer<List<Post>> posts;
+    Observer<List<Post>> observer;
 
     private MainActivityViewModel viewModel;
 
@@ -67,10 +64,10 @@ public class MainActivityViewModelTest {
         ));
         result.setValue(data);
         when(useCase.execute(null)).thenReturn(result);
-        viewModel.observePosts().observeForever(posts);
+        viewModel.observePosts().observeForever(observer);
         assert (viewModel.observePosts().getValue() == data);
         assertNull(viewModel.observeError());
-        verify(posts).onChanged(result.getValue());
+        verify(observer).onChanged(result.getValue());
 
     }
 
@@ -79,12 +76,12 @@ public class MainActivityViewModelTest {
         final MutableLiveData<List<Post>> result = new MutableLiveData<>();
         final MutableLiveData<String> errorResult = new MutableLiveData<>();
         result.setValue(null);
-        errorResult.setValue("No posts found");
+        errorResult.setValue("No observer found");
         when(useCase.execute(null)).thenReturn(result);
         when(useCase.errorListener()).thenReturn(errorResult);
-        viewModel.observePosts().observeForever(posts);
+        viewModel.observePosts().observeForever(observer);
         assertNull(viewModel.observePosts().getValue());
         assertNotNull(viewModel.observeError());
-        verify(posts).onChanged(result.getValue());
+        verify(observer).onChanged(result.getValue());
     }
 }
