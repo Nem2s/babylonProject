@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     RecyclerView recyclerView;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.empty_rv)
+    TextView emprtRv;
 
     MainActivityViewModel viewModel;
     PostsAdapter adapter;
@@ -71,12 +73,20 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             if(posts!= null && !posts.isEmpty()) {
                 adapter.setData(posts);
                 adapter.notifyDataSetChanged();
+                emprtRv.setVisibility(View.INVISIBLE);
+            } else {
+                emprtRv.setVisibility(View.VISIBLE);
             }
         });
         viewModel.observeError().observe(this, text -> {
             if (text != null && !text.isEmpty()) {
                 AnimHelper.animateInfoBanner(infoBanner);
+                if (adapter.getItemCount() == 0) {
+                    emprtRv.setVisibility(View.VISIBLE);
+                }
+
             }
+
         });
         viewModel.observeLoading().observe(this, isLoading -> {
             if (isLoading != null) {

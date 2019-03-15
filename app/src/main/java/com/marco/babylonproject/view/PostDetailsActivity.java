@@ -1,6 +1,7 @@
 package com.marco.babylonproject.view;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.card.MaterialCardView;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -41,8 +42,8 @@ public class PostDetailsActivity extends AppCompatActivity {
     TextView commentsNumber;
     @BindView(R.id.tv_info)
     TextView info;
-    @BindView(R.id.cardview)
-    MaterialCardView cardView;
+    @BindView(R.id.parent)
+    ConstraintLayout parent;
 
     AtomicInteger syncLoading = new AtomicInteger(2);
     PostDetailsActivityViewModel viewModel;
@@ -90,7 +91,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         viewModel.observeComments(postId).observe(this, comments -> {
             if (comments != null) {
                 String number = String.valueOf(comments.size());
-                commentsNumber.setText(number);
+                commentsNumber.setText(number.concat(" comments."));
             }
         });
         viewModel.observeErrorOnComments().observe(this, error -> {
@@ -140,10 +141,10 @@ public class PostDetailsActivity extends AppCompatActivity {
     private void showView() {
         progressBar.setVisibility(View.GONE);
         syncLoading.set(2);
-        cardView.setVisibility(View.VISIBLE);
+        parent.setVisibility(View.VISIBLE);
     }
 
     private void hideView() {
-        cardView.setVisibility(View.GONE);
+        parent.setVisibility(View.GONE);
     }
 }
